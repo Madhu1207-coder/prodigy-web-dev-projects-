@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Madhumitha B's Portfolio</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #eae6e6;
+            color: #02000c;
+            line-height: 1.6;
+        }
+
+        header {
+            background: linear-gradient(45deg, #4bd81c, #23acda);
+            padding: 60px 0;
+            text-align: center;
+        }
+
+        header h1 {
+            font-size: 3rem;
+            color: #100404;
+        }
+
+        header p {
+            font-size: 1.2rem;
+            margin-top: 10px;
+        }
+
+        nav {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        nav ul {
+            list-style-type: none;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            padding: 0;
+            margin: 0;
+        }
+
+        nav ul li {
+            display: inline-block;
+            margin: 5px;
+        }
+
+        nav ul li:nth-child(n+8) {
+            margin-top: 15px;
+        }
+
+        nav ul li a {
+            color: #010b10;
+            font-size: 1.1rem;
+            text-decoration: none;
+            padding: 10px 15px;
+            background-color: #fbb040;
+            border: 2px solid #73c167;
+            border-radius: 20px;
+            transition: background 0.3s, color 0.3s;
+            width: 150px;
+            text-align: center;
+        }
+
+        nav ul li a:hover {
+            background-color: #e2e8ea;
+            color: #1c1c1c;
+        }
+
+        section {
+            padding: 50px 0;
+            text-align: center;
+        }
+
+        section h2 {
+            margin-bottom: 30px;
+            font-size: 2.5rem;
+        }
+
+        .about,
+        .skills,
+        .education,
+        .languagesknown,
+        .courses,
+        .workshop,
+        .corporate-training,
+        .value-added-courses,
+        .internships,
+        .projects,
+        .certifications,
+        .achievements,
+        .miniprojects,
+        .contact {
+            background-color: #f1eaea;
+            padding: 60px 0;
+        }
+
+        .section-content {
+            max-width: 1100px;
+            margin: auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        .section-content div {
+            background-color: #A0D2EB;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            transition: transform 0.3s;
+        }
+
+        .section-content div:hover {
+            transform: translateY(-10px);
+        }
+
+        .profile-image {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            margin-bottom: 20px;
+        }
+
+        footer {
+            background-color: #1c1c1c;
+            padding: 30px 0;
+            text-align: center;
+        }
+
+        footer p {
+            color: #aaa;
+        }
+
+        footer a {
+            color: #ff99cc;
+            text-decoration: none;
+        }
+
+        footer a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+
+<body>
+
+    <header>
+        <h1>Madhumitha B</h1>
+        <p>AI & Data Science | Web Development | Cybersecurity</p>
+        <nav>
+            <ul>
+                <li><a href="#about">About</a></li>
+                <li><a href="#skills">Skills</a></li>
+                <li><a href="#education">Education</a></li>
+                <li><a href="#internships">Internships</a></li>
+                <li><a href="#web-projects">Web Projects</a></li>
+                <li><a href="#software-projects">Software Projects</a></li>
+                <li><a href="#certifications">Certifications</a></li>
+                <li><a href="#achievements">Achievements</a></li>
+                <li><a href="#languages">Languages Known</a></li>
+                <li><a href="#courses">Courses</a></li>
+                <li><a href="#workshop">Workshops</a></li>
+                <li><a href="#corporate-training">Corporate Training</a></li>
+                <li><a href="#value-added-courses">Value Added Courses</a></li>
+                <li><a href="#miniprojects">Mini Projects</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <section id="about" class="about">
+        <div class="section-content">
+            <div>
+                <h2>About Me</h2>
+                <p>I'm Madhumitha B, a passionate student of AI & Data Science from Velammal Engineering College. I'm interested in real-time projects, internships, and working on emerging technologies such as AI, Web Development, and Cybersecurity.</p>
+            </div>
+            <div class="profile">
+                
+                    
+                        <img class="profile" src="profile.jpg" alt="profile" style="width: 300px; height: 300px; margin-right: 10px;">
+                    </a>
+                </div>
+        </div>
+    </section>
+
+    <section id="skills" class="skills">
+        <h2>Key Skills</h2>
+        <div class="section-content">
+            <div>
+                <h3>Programming Languages</h3>
+                <p>Python, JavaScript, HTML, CSS</p>
+            </div>
+            <div>
+                <h3>Web Development</h3>
+                <p>Frontend & Backend Development, APIs, UI/UX</p>
+            </div>
+            <div>
+                <h3>Data Science & AI</h3>
+                <p>Machine Learning, Data Analytics, TensorFlow</p>
+            </div>
+        </div>
+    </section>
+
+    <section id="education" class="education">
+        <h2>Education</h2>
+        <div class="section-content">
+            <div>
+                <h3>Jaigopal Garodia Vivekananda Vidyalaya</h3>
+                <p>KG-SSLC</p>
+            </div>
+            <div>
+                <h3>Jaigopal Garodia Vivekananda Vidyalaya</h3>
+                <p>HSC</p>
+            </div>
+            <div>
+                <h3>Velammal Engineering College</h3>
+                <p>B.Tech in Artificial Intelligence and Data Science</p>
+            </div>
+        </div>
+    </section>
+
+    <section id="languages" class="languagesknown">
+        <h2>Languages Known</h2>
+        <div class="section-content">
+            <div>
+                <h3>Web Languages</h3>
+                <p>HTML, CSS, JavaScript</p>
+            </div>
+            <div>
+                <h3>Programming Languages</h3>
+                <p>Python, C, Node.js</p>
+            </div>
+            <div>
+                <h3>Spoken/Written Languages</h3>
+                <p>English, Tamil</p>
+            </div>
+        </div>
+    </section>
+
+    <section id="courses" class="courses">
+        <h2>Courses</h2>
+        <div class="section-content">
+            <div>
+                <h3>Coursera</h3>
+                <p>1) Foundation of Cybersecurity</p>
+                <p>2) Play it Safe: Manage Security Risk</p>
+                <p>3) Connect and Protect: Network and Network Security</p>
+            </div>
+            <div>
+                <h3>Udemy</h3>
+                <p>1) Introduction to Web Development for Complete Beginners</p>
+            </div>
+            <div>
+                <h3>Simplilearn</h3>
+                <p>1) Introduction to Cybersecurity</p>
+                <p>2) Introduction to Ethical Hacking</p>
+            </div>
+            <div>
+                <h3>LinkedIn Learning</h3>
+                <p>1) Generative AI: The Evolution of Thoughtful Online Search</p>
+            </div>
+            <div>
+                <h3>Cognitive Class AI</h3>
+                <p>1) Python 101 for Data Science</p>
+            </div>
+        </div>
+    </section>
+
+    <section id="workshop" class="workshop">
+        <h2>Workshops</h2>
+        <div class="section-content">
+            <div>
+                <h3>Code Blind Technology</h3>
+                <p>Date: 13/6/2024</p>
+            </div>
+        </div>
+    </section>
+
+    <section id="corporate-training" class="corporate-training">
+        <h2>Corporate Training</h2>
+        <div class="section-content">
+            <div>
+                <h3>Code Blind Technology</h3>
+                <p>Duration: 4/6/2024 – 13/6/2024</p>
+            </div>
+        </div>
+    </section>
+
+    <section id="value-added-courses" class="value-added-courses">
+        <h2>Value Added Courses</h2>
+        <div class="section-content">
+            <div>
+                <h3>Power BI and Tableau</h3>
+                <p>Duration: 25/3/2024 – 1/4/2024</p>
+            </div>
+        </div>
+    </section>
+
+    <section id="internships" class="internships">
+        <h2>Internships</h2>
+        <div class="section-content">
+            <div>
+                <h3>Code Blind Technology</h3>
+                <p>Web Development (Completed)</p>
+                <p>Duration: 4/6/2024 – 13/6/2024</p>
+            </div>
+            <div>
+                <h3>Null Class</h3>
+                <p>Cyber Security (Ongoing)</p>
+            </div>
+            <div>
+                <h3>Prodigy Infotech</h3>
+                <p>Data Science (Ongoing)</p>
+            </div>
+        </div>
+    </section>
+
+    <section id="projects" class="projects">
+        <h2>Projects</h2>
+        <div class="section-content">
+            <div>
+                <h3>Outlier Detection</h3>
+                <p>A project for detecting outliers in data.</p>
+            </div>
+            <div>
+                <h3>Document Clustering</h3>
+                <p>A project for clustering similar documents.</p>
+            </div>
+            <div>
+                <h3>Wind Speed Tracking</h3>
+                <p>A project for tracking wind speed using IoT.</p>
+            </div>
+            <div>
+                <h3>Language Model for Poetry</h3>
+                <p>A project for generating poetry using NLP techniques.</p>
+            </div>
+        </div>
+    </section>
+    <section id="projects" class="projects">
+        <h2>web Projects</h2>
+        <div class="section-content">
+            <div>
+                <h3>nav bar </h3>
+                <p>.</p>
+            </div>
+            <div>
+                <h3>Document Clustering</h3>
+                <p>A project for clustering similar documents.</p>
+            </div>
+            <div>
+                <h3>Wind Speed Tracking</h3>
+                <p>A project for tracking wind speed using IoT.</p>
+            </div>
+            <div>
+                <h3>Language Model for Poetry</h3>
+                <p>A project for generating poetry using NLP techniques.</p>
+            </div>
+        </div>
+    </section>
+
+    <section id="certifications" class="certifications">
+        <h2>Certifications</h2>
+        <div class="section-content">
+            <div>
+                <h3>Foundation of Cybersecurity</h3>
+                <p>Issued by Coursera</p>
+            </div>
+            <div>
+                <h3>Play it Safe: Manage Security Risk</h3>
+                <p>Issued by Coursera</p>
+            </div>
+            <div>
+                <h3>Connect and Protect: Network and Network Security</h3>
+                <p>Issued by Coursera</p>
+            </div>
+            <div>
+                <h3>Introduction to Cybersecurity</h3>
+                <p>Issued by Simplilearn</p>
+            </div>
+            <div>
+                <h3>Introduction to Ethical Hacking</h3>
+                <p>Issued by Simplilearn</p>
+            </div>
+            <div>
+                <h3>Python 101 for Data Science</h3>
+                <p>Issued by Cognitive Class AI</p>
+            </div>
+        </div>
+    </section>
+
+    <section id="achievements" class="achievements">
+        <h2>Achievements</h2>
+        <div class="section-content">
+            <div>
+                <h3>Kho-Kho</h3>
+                <p>Zonal Player</p>
+            </div>
+            <div>
+                <h3>5K Marathon</h3>
+                <p>Completed within top 50</p>
+            </div>
+            <div>
+                <h3>Javelin Throw</h3>
+                <p>Participated in competitions</p>
+            </div>
+        </div>
+    </section>
+
+    <section id="miniprojects" class="miniprojects">
+        <h2>Mini Projects</h2>
+        <div class="section-content">
+            <div>
+                <h3>Stun Gun – A Women’s Safety Device</h3>
+                <p>A device that produces a spark to temporarily disable an attacker.</p>
+                <p>Applied for patent rights.</p>
+            </div>
+        </div>
+    </section>
+
+    <section id="contact" class="contact">
+        <h2>Contact Me</h2>
+        <div class="section-content">
+            <div>
+                <h3>Email</h3>
+                <p><a href="mailto:Madhumithab1207@gmail.com">Madhumithab1207@gmail.com</a></p>
+            </div>
+            <div>
+                <h3>Phone</h3>
+                <p>9344867424</p>
+            </div>
+            <div>
+                <h3>LinkedIn</h3>
+                <p><a href="https://www.linkedin.com/in/madhumitha-b-a545a525b" target="_blank">View my profile</a></p>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <p>&copy; 2024 Madhumitha B. All rights reserved.</p>
+    </footer>
+
+</body>
+
+</html>

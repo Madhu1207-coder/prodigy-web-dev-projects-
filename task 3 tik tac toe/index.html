@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tic Tac Toe</title>
+    <style>
+        /* CSS Styles */
+        body {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #ecf0f1;
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            color: #2c3e50;
+            transition: background-color 1s ease;
+        }
+
+        .header {
+            width: 100%;
+            background-color: #000; /* Black background */
+            padding: 10px 0;
+            text-align: center;
+            color: #fff; /* White text */
+            font-size: 2rem;
+            font-weight: bold;
+        }
+
+        .container {
+            display: flex;
+            width: 90%;
+            max-width: 1000px;
+            background-color: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            margin-top: 20px; /* Add margin for spacing below header */
+        }
+
+        .left-panel {
+            flex: 2; 
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .right-panel {
+            flex: 1; 
+            padding: 20px;
+            border-left: 2px solid #7f8c8d;
+        }
+
+        .board {
+            display: grid;
+            grid-template-columns: repeat(3, 100px);
+            grid-gap: 10px;
+            margin: 20px 0;
+        }
+
+        .cell {
+            width: 100px;
+            height: 100px;
+            background-color: #bdc3c7;
+            border: 2px solid #7f8c8d;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 2rem;
+            cursor: pointer;
+            transition: background-color 0.2s, border-color 0.2s;
+        }
+
+        .cell:hover {
+            background-color: #95a5a6;
+            border-color: #34495e;
+        }
+
+        .winning {
+            background-color: #2ecc71; /* Green for winning combination */
+        }
+
+        .message {
+            font-size: 1.2rem;
+            margin: 10px 0;
+        }
+
+        #reset, #mode, #undo, #difficulty {
+            margin: 5px;
+            padding: 10px 20px;
+            font-size: 1rem;
+            cursor: pointer;
+            border: none;
+            border-radius: 5px;
+            background-color: #2980b9;
+            color: #fff;
+            transition: background-color 0.3s;
+        }
+
+        #reset:hover, #mode:hover, #undo:hover, #difficulty:hover {
+            background-color: #3498db;
+        }
+
+        #scoreboard {
+            margin-top: 20px;
+            font-size: 1.2rem;
+        }
+
+        #history {
+            margin-top: 20px;
+            font-size: 1rem;
+            max-height: 200px;
+            overflow-y: auto;
+            border: 1px solid #bdc3c7;
+            padding: 10px;
+            border-radius: 5px;
+        }
+
+        #achievements {
+            margin-top: 20px;
+            font-size: 1rem;
+            border: 1px solid #bdc3c7;
+            padding: 10px;
+            border-radius: 5px;
+            max-height: 150px;
+            overflow-y: auto;
+        }
+
+        .badge {
+            width: 40px;
+            height: 40px;
+            margin-right: 5px;
+        }
+
+        @media (max-width: 400px) {
+            .cell {
+                width: 80px;
+                height: 80px;
+                font-size: 1.5rem;
+            }
+            .badge {
+                width: 30px;
+                height: 30px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        My Game Website
+    </div>
+
+    <div class="container">
+        <div class="left-panel">
+            <h1>Tic Tac Toe</h1>
+            <input type="text" id="playerX" placeholder="Player X Name" />
+            <input type="text" id="playerO" placeholder="Player O Name" />
+            <div>
+                <button id="mode">Switch to Player vs AI</button>
+                <button id="difficulty">AI Difficulty: Easy</button>
+                <button id="undo" disabled>Undo</button>
+            </div>
+            <div id="board" class="board">
+                <div class="cell" data-index="0"></div>
+                <div class="cell" data-index="1"></div>
+                <div class="cell" data-index="2"></div>
+                <div class="cell" data-index="3"></div>
+                <div class="cell" data-index="4"></div>
+                <div class="cell" data-index="5"></div>
+                <div class="cell" data-index="6"></div>
+                <div class="cell" data-index="7"></div>
+                <div class="cell" data-index="8"></div>
+            </div>
+            <button id="reset">Reset Game</button>
+            <p id="message" class="message"></p>
+        </div>
+        <div class="right-panel">
+            <h2>Scoreboard</h2>
+            <div id="scoreboard">
+                <p>
+                    <span id="nameX">Player X</span> Wins: <span id="scoreX">0</span>
+                    <span id="badgesX"></span>
+                </p>
+                <p>
+                    <span id="nameO">Player O</span> Wins: <span id="scoreO">0</span>
+                    <span id="badgesO"></span>
+                </p>
+                <p>Draws: <span id="draws">0</span></p>
+            </div>
+            <div id="history">
+                <h3>Game History</h3>
+                <div id="historyContent"></div>
+            </div>
+            <div id="achievements">
+                <h3>Achievements</h3>
+                <div id="achievementsContent"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // JavaScript Functionality
+        const cells = document.querySelectorAll('.cell');
+        const message = document.getElementById('message');
+        const resetButton = document.getElementById('reset');
+        const modeButton = document.getElementById('mode');
+        const undoButton = document.getElementById('undo');
+        const difficultyButton = document.getElementById('difficulty');
+        const playerXInput = document.getElementById('playerX');
+        const playerOInput = document.getElementById('playerO');
+        const scoreX = document.getElementById('scoreX');
+        const scoreO = document.getElementById('scoreO');
+        const draws = document.getElementById('draws');
+        const nameX = document.getElementById('nameX');
+        const nameO = document.getElementById('nameO');
+        const historyContent = document.getElementById('historyContent');
+        const achievementsContent = document.getElementById('achievementsContent');
+        const badgesX = document.getElementById('badgesX');
+        const badgesO = document.getElementById('badgesO');
+
+        let currentPlayer = 'X';
+        let boardState = ['', '', '', '', '', '', '', '', ''];
+        let isGameActive = true;
+        let isPlayerVsAI = false;
+        let aiDifficulty = 'Easy';
+        let xWins = 0;
+        let oWins = 0;
+        let drawCount = 0;
+        let gameHistory = [];
+        let lastMove = null;
+
+        const winningConditions = [
+            [0, 1, 2],
+            [3, 4, 5],
+            [6, 7, 8],
+            [0, 3, 6],
+            [1, 4, 7],
+            [2, 5, 8],
+            [0, 4, 8],
+            [2, 4, 6]
+        ];
+
+        // Achievement tracking
+        let achievements = {
+            xWins: 0,
+            oWins: 0,
+            draws: 0,
+            winStreakX: 0,
+            winStreakO: 0
+        };
+
+        cells.forEach(cell => {
+            cell.addEventListener('click', handleCellClick);
+        });
+
+        resetButton.addEventListener('click', resetGame);
+        modeButton.addEventListener('click', switchMode);
+        undoButton.addEventListener('click', undoMove);
+        difficultyButton.addEventListener('click', switchDifficulty);
+
+        function handleCellClick(event) {
+            const cell = event.target;
+            const index = cell.getAttribute('data-index');
+
+            if (boardState[index] !== '' || !isGameActive) return;
+
+            boardState[index] = currentPlayer;
+            cell.textContent = currentPlayer;
+            checkWin();
+            setTimeout(() => {
+                if (isPlayerVsAI && currentPlayer === 'X') {
+                    aiMove();
+                }
+            }, 500); // AI moves after a short delay
+            undoButton.disabled = false; // Enable undo button after a move
+        }
+
+        function checkWin() {
+            let roundWon = false;
+
+            for (let i = 0; i < winningConditions.length; i++) {
+                const condition = winningConditions[i];
+                const a = boardState[condition[0]];
+                const b = boardState[condition[1]];
+                const c = boardState[condition[2]];
+
+                if (a === '' || b === '' || c === '') continue;
+                if (a === b && b === c) {
+                    roundWon = true;
+                    break;
+                }
+            }
+
+            const playerNameX = playerXInput.value || 'Player X';
+            const playerNameO = playerOInput.value || 'Player O';
+
+            if (roundWon) {
+                updateScore();
+                highlightWinningCells(winningConditions.find(condition => {
+                    return boardState[condition[0]] === currentPlayer &&
+                        boardState[condition[1]] === currentPlayer &&
+                        boardState[condition[2]] === currentPlayer;
+                }));
+                message.textContent = `${currentPlayer === 'X' ? playerNameX : playerNameO} wins!`;
+                displayBadge(currentPlayer);
+                isGameActive = false;
+                recordHistory();
+                updateAchievements(currentPlayer);
+                return;
+            }
+
+            if (!boardState.includes('')) {
+                message.textContent = 'It\'s a draw!';
+                drawCount++;
+                draws.textContent = drawCount;
+                recordHistory();
+                isGameActive = false;
+                return;
+            }
+
+            currentPlayer = currentPlayer === 'X' ? 'O' : 'X';
+            message.textContent = `It's ${currentPlayer === 'X' ? playerNameX : playerNameO}'s turn.`;
+        }
+
+        function highlightWinningCells(condition) {
+            condition.forEach(index => {
+                cells[index].classList.add('winning');
+            });
+        }
+
+        function updateScore() {
+            if (currentPlayer === 'X') {
+                xWins++;
+                scoreX.textContent = xWins;
+            } else {
+                oWins++;
+                scoreO.textContent = oWins;
+            }
+        }
+
+        function displayBadge(winner) {
+            const badge = document.createElement('img');
+            badge.src = winner === 'X' ? 'https://img.icons8.com/color/48/000000/trophy.png' : 'https://img.icons8.com/color/48/000000/trophy.png';
+            badge.classList.add('badge');
+
+            if (winner === 'X') {
+                badgesX.appendChild(badge);
+            } else {
+                badgesO.appendChild(badge);
+            }
+        }
+
+        function recordHistory() {
+            const playerNameX = playerXInput.value || 'Player X';
+            const playerNameO = playerOInput.value || 'Player O';
+            const result = currentPlayer === 'X' ? `${playerNameX} wins` : (currentPlayer === 'O' ? `${playerNameO} wins` : 'Draw');
+            gameHistory.push(result);
+            historyContent.innerHTML = gameHistory.join('<br>');
+        }
+
+        function updateAchievements(winner) {
+            if (winner === 'X') {
+                achievements.xWins++;
+                if (achievements.winStreakX > 0) achievements.winStreakX++;
+                achievements.winStreakO = 0;
+            } else {
+                achievements.oWins++;
+                if (achievements.winStreakO > 0) achievements.winStreakO++;
+                achievements.winStreakX = 0;
+            }
+            achievementsContent.innerHTML = `
+                ${playerXInput.value || 'Player X'} Wins: ${achievements.xWins} <br>
+                ${playerOInput.value || 'Player O'} Wins: ${achievements.oWins} <br>
+                Draws: ${achievements.draws} <br>
+                ${playerXInput.value || 'Player X'} Win Streak: ${achievements.winStreakX} <br>
+                ${playerOInput.value || 'Player O'} Win Streak: ${achievements.winStreakO}
+            `;
+        }
+
+        function switchMode() {
+            isPlayerVsAI = !isPlayerVsAI;
+            modeButton.textContent = isPlayerVsAI ? 'Switch to Player vs Player' : 'Switch to Player vs AI';
+            message.textContent = `Game mode switched. It's ${currentPlayer === 'X' ? playerXInput.value || 'Player X' : playerOInput.value || 'Player O'}'s turn.`;
+        }
+
+        function aiMove() {
+            let emptyCells = boardState.map((val, index) => val === '' ? index : null).filter(val => val !== null);
+            if (emptyCells.length === 0) return;
+
+            let index = emptyCells[Math.floor(Math.random() * emptyCells.length)];
+            lastMove = { player: 'O', index: index };
+            boardState[index] = 'O';
+            cells[index].textContent = 'O';
+            checkWin();
+        }
+
+        function resetGame() {
+            boardState = ['', '', '', '', '', '', '', '', ''];
+            isGameActive = true;
+            currentPlayer = 'X';
+            message.textContent = `It's ${playerXInput.value || 'Player X'}'s turn.`;
+            cells.forEach(cell => {
+                cell.textContent = '';
+                cell.classList.remove('winning');
+            });
+            undoButton.disabled = true; // Disable undo button on reset
+            badgesX.innerHTML = ''; // Clear badges for Player X
+            badgesO.innerHTML = ''; // Clear badges for Player O
+        }
+
+        function undoMove() {
+            if (!lastMove) return;
+            const { player, index } = lastMove;
+            boardState[index] = '';
+            cells[index].textContent = '';
+            currentPlayer = player === 'X' ? 'O' : 'X'; // Switch back to the previous player
+            lastMove = null; // Clear last move
+            message.textContent = `It's ${currentPlayer === 'X' ? playerXInput.value || 'Player X' : playerOInput.value || 'Player O'}'s turn.`;
+        }
+
+        function switchDifficulty() {
+            aiDifficulty = aiDifficulty === 'Easy' ? 'Hard' : 'Easy';
+            difficultyButton.textContent = `AI Difficulty: ${aiDifficulty}`;
+        }
+
+        // Dynamic Background Color
+        let colors = ['#ff7675', '#fdcb6e', '#55efc4', '#81ecec', '#74b9ff', '#a29bfe', '#dfe6e9'];
+        let currentColor = 0;
+
+        setInterval(() => {
+            document.body.style.backgroundColor = colors[currentColor];
+            currentColor = (currentColor + 1) % colors.length;
+        }, 3000); // Change color every 3 seconds
+    </script>
+</body>
+</html>

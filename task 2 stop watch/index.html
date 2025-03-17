@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Enhanced Stopwatch</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      background-color: #bde0fe;
+    }
+
+    header {
+      font-size: 28px;
+      margin-bottom: 20px;
+      font-weight: bold;
+      color: #1d3557;
+      text-align: center;
+    }
+
+    .stopwatch {
+      text-align: center;
+      background-color: #f9c74f;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      width: 100%;
+      max-width: 400px;
+    }
+
+    #display {
+      font-size: 48px;
+      margin-bottom: 20px;
+      color: #e63946;
+    }
+
+    .controls button, #dark-mode-toggle, #countdown-start-btn, #music-toggle {
+      padding: 10px 20px;
+      margin: 5px;
+      border: none;
+      background-color: #90be6d;
+      color: #fff;
+      font-size: 16px;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    .controls button:hover, #dark-mode-toggle:hover, #countdown-start-btn:hover, #music-toggle:hover {
+      background-color: #f3722c;
+    }
+
+    .laps {
+      margin-top: 20px;
+    }
+
+    #laps-list {
+      list-style-type: none;
+      padding: 0;
+      color: #f94144;
+    }
+
+    body.dark-mode {
+      background-color: #121212;
+      color: #f0f0f0;
+    }
+    
+    .stopwatch.dark-mode {
+      background-color: #1e1e1e;
+      box-shadow: 0 4px 8px rgba(255, 255, 255, 0.1);
+    }
+
+    select {
+      padding: 10px;
+      margin-top: 10px;
+    }
+  </style>
+</head>
+<body>
+  <header>My Stopwatch Website</header>
+  <div class="stopwatch">
+    <h1>Stopwatch</h1>
+    <div id="display">00:00:00</div>
+    <div class="controls">
+      <button id="start-btn">Start</button>
+      <button id="pause-btn">Pause</button>
+      <button id="reset-btn">Reset</button>
+      <button id="lap-btn">Lap</button>
+      <button id="dark-mode-toggle">Toggle Dark Mode</button>
+      <button id="music-toggle">Play Music</button>
+    </div>
+    <div>
+      <select id="theme-selector">
+        <option value="default">Default</option>
+        <option value="theme1">Blue Theme</option>
+        <option value="theme2">Green Theme</option>
+      </select>
+    </div>
+    <div class="laps">
+      <h2>Lap Times</h2>
+      <ul id="laps-list"></ul>
+    </div>
+    <div>
+      <input type="number" id="countdown-input" placeholder="Seconds to Countdown">
+      <button id="countdown-start-btn">Start Countdown</button>
+    </div>
+  </div>
+
+  <audio id="start-sound" src="https://www.bensound.com/bensound-music/bensound-ukulele.mp3" preload="auto"></audio>
+  <audio id="stop-sound" src="https://www.bensound.com/bensound-music/bensound-ukulele.mp3" preload="auto"></audio>
+  <audio id="reset-sound" src="https://www.bensound.com/bensound-music/bensound-ukulele.mp3" preload="auto"></audio>
+  <audio id="background-music" src="https://www.bensound.com/bensound-music/bensound-ukulele.mp3" preload="auto" loop></audio>
+
+  <script>
+    let timer;
+    let startTime;
+    let elapsedTime = 0;
+    let isRunning = false;
+    let lapCounter = 1;
+    let previousLapTime = 0;
+    let countdownTimer;
+    const display = document.getElementById('display');
+    const lapsList = document.getElementById('laps-list');
+    const startSound = document.getElementById('start-sound');
+    const stopSound = document.getElementById('stop-sound');
+    const resetSound = document.getElementById('reset-sound');
+    const backgroundMusic = document.getElementById('background-music');
+
+    window.onload = function() {
+      loadLaps();
+    };
+
+    function saveLaps() {
+      const laps = [];
+      document.querySelectorAll('#laps-list li').forEach(lap => laps.push(lap.textContent));
+      localStorage.setItem('laps', JSON.stringify(laps));
+    }
+
+    function loadLaps() {
+      const savedLaps = JSON.parse(localStorage.getItem('laps'));
+      if (savedLaps) {
+        savedLaps.forEach(lap => {
+          const li = document.createElement('li');
+          li.textContent = lap;
+          lapsList.appendChild(li);
+        });
+      }
+    }
+
+    function startStopwatch() {
+      if (!isRunning) {
+        startSound.play();
+        startTime = Date.now() - elapsedTime;
+        timer = setInterval(updateDisplay, 100);
+        isRunning = true;
+      }
+    }
+
+    function pauseStopwatch() {
+      if (isRunning) {
+        stopSound.play();
+        clearInterval(timer);
+        elapsedTime = Date.now() - startTime;
+        isRunning = false;
+      }
+    }
+
+    function resetStopwatch() {
+      resetSound.play();
+      clearInterval(timer);
+      elapsedTime = 0;
+      isRunning = false;
+      display.textContent = '00:00:00';
+      lapsList.innerHTML = '';
+      lapCounter = 1;
+      previousLapTime = 0;
+      saveLaps();
+    }
+
+    function updateDisplay() {
+      const time = Date.now() - startTime;
+      const seconds = Math.floor((time / 1000) % 60);
+      const minutes = Math.floor((time / (1000 * 60)) % 60);
+      const hours = Math.floor((time / (1000 * 60 * 60)) % 24);
+      display.textContent = `${formatTime(hours)}:${formatTime(minutes)}:${formatTime(seconds)}`;
+    }
+
+    function formatTime(time) {
+      return time.toString().padStart(2, '0');
+    }
+
+    function recordLap() {
+      if (isRunning) {
+        const currentLapTime = elapsedTime;
+        const lapTimeDiff = currentLapTime - previousLapTime;
+        previousLapTime = currentLapTime;
+
+        const li = document.createElement('li');
+        li.textContent = `Lap ${lapCounter}: ${display.textContent} (Δ ${formatTime(Math.floor(lapTimeDiff / 1000))})`;
+        lapsList.appendChild(li);
+        lapCounter++;
+        saveLaps();
+      }
+    }
+
+    document.getElementById('dark-mode-toggle').addEventListener('click', () => {
+      document.body.classList.toggle('dark-mode');
+      document.querySelector('.stopwatch').classList.toggle('dark-mode');
+    });
+
+    document.getElementById('music-toggle').addEventListener('click', () => {
+      if (backgroundMusic.paused) {
+        backgroundMusic.play();
+        document.getElementById('music-toggle').textContent = "Pause Music";
+      } else {
+        backgroundMusic.pause();
+        document.getElementById('music-toggle').textContent = "Play Music";
+      }
+    });
+
+    function startCountdown() {
+      const countdownTime = parseInt(document.getElementById('countdown-input').value) * 1000;
+      clearInterval(timer);
+      elapsedTime = countdownTime;
+      updateCountdownDisplay(countdownTime);
+      
+      countdownTimer = setInterval(() => {
+        elapsedTime -= 1000;
+        updateCountdownDisplay(elapsedTime);
+        if (elapsedTime <= 0) {
+          clearInterval(countdownTimer);
+          alert('Time is up!');
+        }
+      }, 1000);
+    }
+
+    function updateCountdownDisplay(time) {
+      const seconds = Math.floor((time / 1000) % 60);
+      const minutes = Math.floor((time / (1000 * 60)) % 60);
+      const hours = Math.floor((time / (1000 * 60 * 60)) % 24);
+      display.textContent = `${formatTime(hours)}:${formatTime(minutes)}:${formatTime(seconds)}`;
+    }
+
+    document.getElementById('start-btn').addEventListener('click', startStopwatch);
+    document.getElementById('pause-btn').addEventListener('click', pauseStopwatch);
+    document.getElementById('reset-btn').addEventListener('click', resetStopwatch);
+    document.getElementById('lap-btn').addEventListener('click', recordLap);
+    document.getElementById('countdown-start-btn').addEventListener('click', startCountdown);
+  </script>
+</body>
+</html>
